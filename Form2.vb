@@ -176,7 +176,6 @@ Public Class Form2
                         MyExcel.ActiveCell.Value = element.Value
                     End If
                 Next
-
             Next
         Next
     End Sub
