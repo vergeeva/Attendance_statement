@@ -20,6 +20,45 @@ Public Class Form2
         Return 1
     End Function
 
+    Public Function WriteIn(Month As Integer, ByRef d As Dictionary(Of Integer, Dictionary(Of Integer, String))) As Integer
+        Dim Mnth As String = ""
+        Select Case Month
+            Case 1
+                Mnth = "Январь"
+            Case 2
+                Mnth = "Февраль"
+            Case 3
+                Mnth = "Март"
+            Case 4
+                Mnth = "Апрель"
+            Case 5
+                Mnth = "Май"
+            Case 6
+                Mnth = "Июнь"
+            Case 7
+                Mnth = "Июль"
+            Case 8
+                Mnth = "Август"
+            Case 9
+                Mnth = "Сентябрь"
+            Case 10
+                Mnth = "Октябрь"
+            Case 11
+                Mnth = "Ноябрь"
+            Case 12
+                Mnth = "Декабрь"
+        End Select
+        Dim sw As IO.StreamWriter = New IO.StreamWriter(My.Application.Info.DirectoryPath & "\" & Mnth & ".txt")
+        Dim Line As String
+        For Each el As KeyValuePair(Of Integer, String) In d(Month)
+            Line = Convert.ToString(el.Key) + "!" + el.Value
+            sw.WriteLine(Line)
+        Next
+        sw.Close()
+        Return 0
+    End Function
+
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         'Создание экземпляра
         Dim MyExcel As New Excel.Application
@@ -194,6 +233,7 @@ Public Class Form2
                 cl.Width = 100
                 DataGridView1.Columns.Add(cl)
                 DataGridView1.Rows(0).Cells(DataGridView1.Columns.IndexOf(cl)).Value = status
+                WriteIn(DateTimePicker1.Value.Month, dict)
             End If
         Else
             If Not dict.Item(DateTimePicker1.Value.Month).ContainsKey(DateTimePicker1.Value.Day) Then
@@ -203,6 +243,7 @@ Public Class Form2
                 cl.Width = 100
                 DataGridView1.Columns.Add(cl)
                 DataGridView1.Rows(0).Cells(DataGridView1.Columns.IndexOf(cl)).Value = status
+                WriteIn(DateTimePicker1.Value.Month, dict)
             Else
                 MessageBox.Show("Посещаемость уже проставлена на эту дату", "Предупреждение")
             End If
@@ -212,5 +253,7 @@ Public Class Form2
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         TakeFrom("Март.txt", dict, 3)
+        TakeFrom("Апрель.txt", dict, 4)
+        DateTimePicker1_ValueChanged(sender, e)
     End Sub
 End Class
